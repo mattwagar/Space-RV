@@ -1,22 +1,21 @@
 fileFormatVersion: 2
-guid: bd14e93c4f2f883459e45fbf6b718c7b
+guid: 619498ebb86586d4f87d3aa611125382
 TextureImporter:
   fileIDToRecycleName:
-    21300000: mom_walk_spritesheet_0
-    21300002: mom_walk_spritesheet_1
-    21300004: mom_walk_spritesheet_2
-    21300006: mom_walk_spritesheet_3
-    21300008: mom_walk_spritesheet_4
-    21300010: mom_walk_spritesheet_5
-    21300012: mom_walk_spritesheet_6
-    21300014: mom_walk_spritesheet_7
-    21300016: mom_walk_spritesheet_8
-    21300018: mom_walk_spritesheet_9
+    21300000: mom_idle_animation_0
+    21300002: mom_idle_animation_1
+    21300004: mom_idle_animation_2
+    21300006: mom_idle_animation_3
+    21300008: mom_idle_animation_4
+    21300010: mom_idle_animation_5
+    21300012: mom_idle_animation_6
+    21300014: mom_idle_animation_7
+    21300016: mom_idle_animation_8
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -55,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -94,7 +93,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: mom_walk_spritesheet_0
+      name: mom_idle_animation_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7719c3f069a4964eb797ebc783814ee
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mom_idle_animation_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 80
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e3f4c25190fa9e4185d8288de28eb81
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mom_idle_animation_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 80
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b084f4a718f2f9448bd8ae825b482aa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mom_idle_animation_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 40
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7185ac711ba1ca04fb7f86ff8b37a6bb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mom_idle_animation_4
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 40
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2580c6258eb3e243a25ca6ebeeae3a9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mom_idle_animation_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 40
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 028e2a60ad6bdfd4d84869f68661e7da
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mom_idle_animation_6
       rect:
         serializedVersion: 2
         x: 0
@@ -108,13 +227,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 834d543523f21264f9f89d6941c58073
+      spriteID: 53c75a6ed64cd2848a94894371bd1f82
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mom_walk_spritesheet_1
+      name: mom_idle_animation_7
       rect:
         serializedVersion: 2
         x: 40
@@ -128,13 +247,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5624ca6aed0cabc4f9204b21679bba1b
+      spriteID: 286b4450be8bcc241bb2889fe5896d58
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mom_walk_spritesheet_2
+      name: mom_idle_animation_8
       rect:
         serializedVersion: 2
         x: 80
@@ -148,147 +267,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc95f1ef64acbd24c9de6803692ff688
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_3
-      rect:
-        serializedVersion: 2
-        x: 120
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 12669f82b82f8354281c3e42c3b9537e
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_4
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cd34541760730c345a5486da88192454
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_5
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c6710d6fd0d18104cbda05d717917fb5
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_6
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 37e672f393cfd714da75fe2a7246eb7d
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_7
-      rect:
-        serializedVersion: 2
-        x: 280
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ccc42cc47a820d646817927bca681d92
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_8
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d120ed2e2c13a4542a1c5e912d2da7c2
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mom_walk_spritesheet_9
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c45b60a142c1194db95202ee6da65d6
+      spriteID: 901cd6f8d47c17141b609fca4139a4db
       vertices: []
       indices: 
       edges: []
@@ -296,7 +275,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: a9f1b4cf64f28ab45a675462528d89ce
+    spriteID: 5c07c9c634c7cea4bb5e17029ce67474
     vertices: []
     indices: 
     edges: []
