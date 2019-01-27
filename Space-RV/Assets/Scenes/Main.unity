@@ -3908,6 +3908,11 @@ PrefabInstance:
       propertyPath: elevatorObj
       value: 
       objectReference: {fileID: 1017349182}
+    - target: {fileID: 8284302667114567993, guid: 6a9221ab299d10f448dd347e1f850e59,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8236978073264653621, guid: 6a9221ab299d10f448dd347e1f850e59,
         type: 3}
       propertyPath: m_IsActive
@@ -3917,11 +3922,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingOrder
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8284302667114567993, guid: 6a9221ab299d10f448dd347e1f850e59,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 481758588667624351, guid: 6a9221ab299d10f448dd347e1f850e59,
         type: 3}
