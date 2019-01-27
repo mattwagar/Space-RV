@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
             if(Input.GetButtonDown("Fire1"))
             {
                 
-                //Debug.Log("Calling Elevator");
+                
                 elevator.Elevator(floor);
                 Debug.Log("Riding Elevator");
             }
@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
+        //if you enter the first floor shaft you can call the elevator
         if(col.gameObject.tag == "FirstFloor")
         {
            // Debug.Log("Can Call Elevator to First Floor");
@@ -74,17 +75,19 @@ public class PlayerMovement : MonoBehaviour
             canCallElevator = true;
         }
 
+        //if you enter the second floor shaft you can call the elevator
         else if(col.gameObject.tag == "SecondFloor")
         {
            // Debug.Log("Can call elevator to Second floor");
             floor = 2;
             canCallElevator = true;
         }
-        
+        Debug.Log(floor);
     }
 
     void OnTriggerStay2D(Collider2D col)
     {
+        //if inside the elevator it can't be called
         if(col.gameObject.tag == "ElevatorTrigger")
         {
             canRide = true;
@@ -94,13 +97,14 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col)
     {
+        //if you exit the elevator shaft the elevator can't be called 
         if(col.gameObject.tag == "FirstFloor" || col.gameObject.tag == "SecondFloor")
         {
           //  Debug.Log("Left Elevator Shaft");
             floor = 0;
             canCallElevator = false;
         }
-
+        //if you exit the elevator you can't ride it
         else if(col.gameObject.tag == "ElevatorTrigger")
         {
             canRide = false;
@@ -108,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+//handles player movement 
     void Movement()
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;

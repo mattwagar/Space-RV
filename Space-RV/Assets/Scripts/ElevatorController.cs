@@ -117,6 +117,9 @@ public class ElevatorController : MonoBehaviour
             yield break;
         }
         ridingElevator = true;
+        player.GetComponent<CapsuleCollider2D>().enabled = false;
+        player.GetComponent<Rigidbody2D>().simulated = false;
+        player.transform.SetParent(elevator.transform);
 
         float counter = 0;
         
@@ -127,7 +130,7 @@ public class ElevatorController : MonoBehaviour
             //on the same floor
             
             //go to the first floor
-            player.transform.SetParent(elevator.transform);
+            
             if(floor == 2)
             {
                 
@@ -142,11 +145,17 @@ public class ElevatorController : MonoBehaviour
                 //Debug.Log("Arrived 2 Floor");
 
             }
+       
             yield return null;
         }
-
-        ridingElevator = false;
         player.transform.parent = null;
+        player.GetComponent<Rigidbody2D>().simulated = true;
+        player.GetComponent<CapsuleCollider2D>().enabled = true;
+        
+        ridingElevator = false;
+        
+        
+
     }
     
 }
