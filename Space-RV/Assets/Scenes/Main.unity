@@ -679,16 +679,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WIDTH: 50
-  SWEET: 1
-  SPEED: 0.03
-  ACCEL: 0.01
+  SWEET: 5
+  SPEED: 0.05
+  ACCEL: 0.006
   WINTIME: 100
   needlePos: 0
   steerSlider: {fileID: 1120016465}
   bridge: {fileID: 0}
   player: {fileID: 634879843}
+  countMin: 5
+  countMax: 6
   isSteering: 0
   canInteract: 0
+  countdownRunning: 0
 --- !u!61 &266825245
 BoxCollider2D:
   m_ObjectHideFlags: 0

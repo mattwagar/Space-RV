@@ -35,8 +35,11 @@ public class GameSteering : MonoBehaviour
 	public Slider steerSlider;
 	public BridgeRoom bridge;
 	public PlayerMovement player;
+	public int countMin = 5;
+	public int countMax = 20;
 	public bool isSteering = false;
 	public bool canInteract = false;
+	public bool countdownRunning = false;
 
     void Start()
     {
@@ -54,12 +57,13 @@ public class GameSteering : MonoBehaviour
     		return;
     	}
         
-        //if (timeInSweetSpot >= WINTIME) 
-       // {
+        if (timeInSweetSpot >= WINTIME) 
+        {
     //	WIN STATE HERE
         	//Debug.Log("Congratulations!");
-        	//gameOver = true;
-        //}
+        	gameOver = true;
+			StartCoroutine(CountdownNext());
+        }
         if (Math.Abs(needlePos) > WIDTH) 
         {
     //	LOSE STATE HERE
@@ -80,15 +84,7 @@ public class GameSteering : MonoBehaviour
 		if(isSteering)
 		{
 
-			listenToControlPad();
-			//press b to exit steering
-			if(Input.GetButtonDown("Fire2"))
-			{
-				isSteering = false;
-				player.canMove = true;				
-			}
-
-
+			listenToControlPad();		
 
 		}
 
@@ -152,6 +148,14 @@ public class GameSteering : MonoBehaviour
     		}
     		currentSpeed += Math.Abs(input) * ACCEL;
     	}
+
+		//press b to exit steering
+			if(Input.GetButtonDown("Fire2"))
+			{
+				Debug.Log("Not Steering");
+				isSteering = false;
+				player.canMove = true;				
+			}
     }
 
     int leftOrRight()	{
@@ -162,4 +166,23 @@ public class GameSteering : MonoBehaviour
     		return 1;
     	}
     }
+
+	IEnumerator CountdownNext()
+	{
+		if(countdownRunning)
+		{
+			yield break;
+		}
+
+		countdownRunning = true;
+
+		int count = UnityEngine.Random.Range(countMin,countMax);
+		yield return new WaitForSeconds(count);
+		gameOver = false;
+		timeInSweetSpot = 0;
+		Debug.Log("Game Starting again");
+		currentSpeed = SPEED;
+		isSteering = false;
+		countdownRunning = false;
+	}
 }
