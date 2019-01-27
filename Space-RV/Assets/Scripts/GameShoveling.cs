@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameShoveling : MonoBehaviour
 {
@@ -52,6 +53,7 @@ public class GameShoveling : MonoBehaviour
 	public PlayerMovement player;
 	public GameObject goodSprite;
 	public GameObject badSprite;
+	public Slider tempGauge;
 
     void Start()
     {
@@ -108,6 +110,8 @@ public class GameShoveling : MonoBehaviour
         	  }
         	  break;
         }
+
+		tempGauge.value = furnaceTemp;
     }
 
     //	Furnace loses 1% per minute while open throughout game
