@@ -7,7 +7,7 @@ public class GameShoveling : MonoBehaviour
 	//	GLOBAL VARIABLES
 	//	===================================================
 	//	How many frames it takes to dig or dump a shovelful
-		public float MOVETIME = 30;
+		public float MOVETIME = 15;
 
 	//	Rate at which the reactor cools when opened
 		public float COOLINGRATE = 0.02f;
@@ -36,10 +36,26 @@ public class GameShoveling : MonoBehaviour
 	int charPosition = START;
 	int digTime = 0;
 	bool goodUranium = true;
+	public bool shovelGameActive = false;
+
+	//object references
+	public SpriteRenderer reactorSprite;	
+	public SpriteRenderer shovelSprite;
+	public bool inReactor = false;
+
+	//public Sprite reactorClosed;
+	//public Sprite reactorOpen;
+
+	public GameObject uraniumPile;
+	public GameObject reactor;
+	public ReactorControl reactorController;
+	public PlayerMovement player;
+	public GameObject goodSprite;
+	public GameObject badSprite;
 
     void Start()
     {
-        Debug.Log("running");
+        //Debug.Log("running");
     }
 
     void Update()
@@ -99,46 +115,128 @@ public class GameShoveling : MonoBehaviour
     	furnaceTemp -= COOLINGRATE;
     }
 
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if(other.gameObject.tag == "Player")
+		{
+			inReactor = true;
+		}
+	}
+
+	void OnTriggerStay2D(Collider2D other)
+	{
+		if(other.gameObject.tag == "Player")
+		{
+			inReactor = true;
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D other)
+	{
+		if(other.gameObject.tag == "Player")
+		{
+			inReactor = false;
+			shovelSprite.enabled = true;
+		}
+	}
     void listenToDig()	{
     	//	On button press, change position and fill shovel
-        if (Input.GetButtonDown("LB"))
-        {
+		if(inReactor)
+		{
+			if (Input.GetButtonDown("LB"))
+        	{
+			if(shovelGameActive == false)
+				{
+					shovelGameActive = true;
+				}
         	charPosition = DIG;
+			shovelSprite.enabled=false;
+			player.canMove = false;
+			player.animator.SetBool("Shoveling", true);
+			player.animator.SetTrigger("Dig");
+
 
         	//	Determine whether uranium is any good
         	goodUranium = (Random.Range(0, 100) > U_RATIO);
 
         	Debug.Log("shovelful of U; good stuff: " + goodUranium);
-        }
+			if(goodUranium)
+			{
+				goodSprite.SetActive(true);
+
+			}
+
+			else
+			{
+				badSprite.SetActive(true);
+			}
+        	}
+		}
+        
     }
 
     void listenToShovel()	{
+
+		
     	//	If uranium is put in furnace, change position and empty shovel
-    	if (Input.GetButtonDown("LT")) 
+    	if (Input.GetButtonDown("Fire3")) 
     	{
-    		charPosition = ADD;
+			if(reactorController.open)
+			{
+				charPosition = ADD;
 
     		//	Good uranium raises temperature, bad lowers it
     		furnaceTemp = goodUranium
     			? furnaceTemp + GOOD_U
     			: furnaceTemp - BAD_U;
+				player.animator.SetTrigger("Throw");
+				if(goodSprite.activeSelf== true)
+				{
+					goodSprite.SetActive(false);
+				}
+				else if(badSprite.activeSelf == true)
+				{
+					badSprite.SetActive(false);
+				}
 
-    		//	Check for goal temperature
-    		if (furnaceTemp >= 100)
-    		{
-    //	WIN STATE
-    			furnaceTemp = 100;
-    			Debug.Log("furnace is full");
-    			return;
-    		}
-    		Debug.Log("furnace temp " + furnaceTemp);
+			}
+
+			else
+			{
+				Debug.Log("Reactor is closed!");
+			}
+
+    		
+		}
+    		
+		//	Check for goal temperature
+    	if (furnaceTemp >= 100)
+    	{
+    	//	WIN STATE
+    		furnaceTemp = 100;
+    		Debug.Log("furnace is full");
+    		return;
     	}
-
+    	//Debug.Log("furnace temp " + furnaceTemp);
+    		
     	//	If uranium is tossed aside, change position and empty shovel
-    	if (Input.GetButtonDown("RT"))
+    	if (Input.GetButtonDown("Fire2"))
     	{
     		charPosition = TOSS;
     		Debug.Log("tossed aside");
+			shovelGameActive = false;
+			player.canMove = true;
+			player.animator.SetBool("Shoveling", false);
+			player.animator.SetTrigger("Throw");
+			if(goodSprite.activeSelf== true)
+				{
+					goodSprite.SetActive(false);
+				}
+				else if(badSprite.activeSelf == true)
+				{
+					badSprite.SetActive(false);
+				}
+
     	}
     }
 }
