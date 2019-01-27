@@ -2,28 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SequenceScript : MonoBehaviour
+public class GameSequence	 : MonoBehaviour
 {
 	//	GLOBAL VARIABLES
 	//	=================================================
-	//	Number of control pad arrows 
+	//	Is the game running
+		public bool gameIsOn = false;
+
+	//	Number of control pad arrows
 	//	before player gets to see which button to press
 		public int ARROWS = 3;
 
 	//	Time to press button
 		public int BTN_SPEED = 50;
+
+	//	Kids' happiness meter
+		public float HAPPINESS = 100.0f;
+
+	//	Rate of happiness decrease when idle
+		public float IDLE_HANDS = 0.01f
+
+	//	Add to kids' happiness on win
+		public float HAPPY_UP = 10.0f;
+
+	//	Decrease kids' happiness on loss
+		public float HAPPY_DOWN = 20.0f;
 	//	=================================================
 
-    int[] sequences = new int[ARROWS + 1];
+    int[] sequence = new int[ARROWS + 1];
     bool readyForNextSeq = true;
     bool showLetter = false;
-    int currentSeq = 0;
     int currentArrow = 0;
     bool listenToPad = true;
+    int buttonTimer = 0;
 
     void Start()
     {
     	Debug.Log("running");
+    }
+
+    void FixedUpdate()	{
+    	if (showLetter) 
+    	{
+    		buttonTimer++;
+    	}
+    	if (!gameIsOn) 
+    	{
+    		HAPPINESS -= IDLE_HANDS;
+    	}
     }
 
     void Update()
@@ -33,56 +59,35 @@ public class SequenceScript : MonoBehaviour
     //	B BUTTON; EXIT GAME
     	}
 
-    	float inputX = Input.GetAxis("Horizontal");
-    	float inputY = Input.GetAxis("Vertical");
+    	if (!showLetter) 
+	    	{
+	    	float inputX = Input.GetAxis("Horizontal");
+	    	float inputY = Input.GetAxis("Vertical");
 
-    	//	Turn listening back on when player lets go of control pad
-    	if (inputX < 0.1 && inputX > -0.1 && inputY < 0.1 && inputY > -0.1) 
-    	{
-    		listenToPad = true;
+	    	//	Turn listening back on when player lets go of control pad
+	    	if (&& inputX < 0.1 && inputX > -0.1 && inputY < 0.1 && inputY > -0.1) 
+	    	{
+	    		listenToPad = true;
+	    	}
     	}
 
     	//	Waiting for the next arrow input
     	if (listenToPad && currentArrow < ARROWS)
     	{
     		//	Check which direction the player pressed
-    		int input = checkPad(inputX, inputY);
-    		if (input > -1) 
-    		{
-    			//	If it matches the next on in the sequence, increment the array index
-	    		if (input == sequences[currentSeq, currentArrow]) 
-	    		{
-	    			Debug.Log("correct");
-	    			currentArrow++;
-	    		}	else {
-	//	CALL START-OVER STATE HERE
-	    			Debug.Log("wrong");
-	    			currentArrow = 0;
-	    		}
-
-	    		//	If the arrow sequence is complete, reveal the button
-	    		//	The showLetter boolean is only here to prevent the Debug Console from showing
-	    		//	it over and over; it may not be necessary when integrated into the game
-	    		if (currentArrow == ARROWS)
-	    		{
-	    			showLetter = true;
-	    		}
-    		}
+    		checkPad(inputX, inputY);
     	}
 
     	//	Waiting for button input
-    	if (currentArrow == ARROWS)
+    	if (showLetter)
     	{
+    		if (buttonTimer >= BTN_SPEED) 
+    		{
+    			HAPPINESS -= HAPPY_DOWN
+    		}
     		//	Send the sequence number, get back the button letter
     		char button = getSequenceButton();
 
-    		//	See note above re: the showLetter boolen
-    		if (showLetter)
-    		{
-	    		showLetter = false;
-		    	Debug.Log("now press " + button);
-    		}
-    		
     		//	Check if player is pressing a button
     		char input = checkButtons();
 
@@ -95,20 +100,13 @@ public class SequenceScript : MonoBehaviour
 	    		if (button == input) 
 	    		{
 	    			Debug.Log("yup");
-	    			currentArrow = 0;
-	    			currentSeq++;
+	    			HAPPINESS += HAPPY_UP;
 	    			readyForNextSeq = true;
 	    		}	else {
 	//	CALL LOSE STATE HERE
 	    			Debug.Log("no dice, " + input);
+	    			HAPPINESS -= HAPPY_DOWN;
 	    		}
-    		}
-
-    		//	Once entire sequence array has been traversed, game is won 
-    		if (currentSeq == SEQUENCES) 
-    		{
-	//	CALL WIN STATE HERE
-    			Debug.Log("woohoo, you fixed the ship");
     		}
     	}
 
@@ -125,29 +123,48 @@ public class SequenceScript : MonoBehaviour
     //	corresponding to the sequence array,
     //	then turns off the listener until the player lets go of the pad
     //	between presses
-    int checkPad(float x, float y) {
-    	int returnValue = -1;
+    checkPad(float x, float y) {
+    	int inputValue = -1;
     	if (y > 0.9) 
     	{
-	    	returnValue = 2;
+	    	inputValue = 2;
     	}
     	if (y < -0.9) 
     	{
-	    	returnValue = 0;
+	    	inputValue = 0;
     	}
     	if (x < -0.9) 
     	{
-	    	returnValue = 3;
+	    	inputValue = 3;
     	}
     	if (x > 0.9) 
     	{
-	    	returnValue = 1;
+	    	inputValue = 1;
     	}
-    	if (returnValue > -1) 
+
+    	//	If pad was not pressed, wait for next frame
+    	if (inputValue == -1) 
     	{
-	    	listenToPad = false;
-    	}
-    	return returnValue;
+	    	return;
+    	}	else {
+    		listenToPad = false;
+			//	If it matches the next on in the sequence, increment the array index
+			if (input == sequence[currentArrow]) 
+			{
+				Debug.Log("correct");
+				currentArrow++;
+			}	else {
+	//	CALL START-OVER STATE HERE
+				Debug.Log("wrong");
+				currentArrow = 0;
+			}
+
+			//	If the arrow sequence is complete, reveal the button
+			if (currentArrow == ARROWS)
+			{
+				showLetter = true;
+			}
+		}
     }
 
     //	Listener for the buttons; returns letter of button pressed
@@ -171,7 +188,7 @@ public class SequenceScript : MonoBehaviour
     //	Returns button letter mapped to 0-3 from sequence array
     char getSequenceButton()	{
     	char letter = ' ';
-    	switch (sequences[currentSeq, 3]) 
+    	switch (sequence[currentSeq, 3]) 
     	{
     		case 0:
     		  letter = 'A';
@@ -189,10 +206,19 @@ public class SequenceScript : MonoBehaviour
     // Traverses arrow portion of current sequence
     void displayNext()	{
     	readyForNextSeq = false;
+    	currentArrow = 0;
 
+    	for (int i = 0; i < ARROWS; i++) 
+    	{
+    		sequence[i] = Random.Range(0, 4);
+    	}
+    	sequence[ARROWS] = Random.Range(0, 3)
+
+    	//	This is just Debug Console shit;
+    	//	Basically, at this point display the arrow sprites on the screen
     	for (int i=0; i<3; i++) 
     	{
-    		showArrow(sequences[currentSeq, i]);
+    		showArrow(sequence[i]);
     	}
 
 
