@@ -22,7 +22,7 @@ public class DoorControl : MonoBehaviour
     {
         if(col.gameObject.tag == "Player")
         {
-            Debug.Log("Open");
+           // Debug.Log("Open");
             //open door 
             if(open == false)
             {
@@ -49,7 +49,7 @@ public class DoorControl : MonoBehaviour
     {
         if(col.gameObject.tag == "Player")
         {
-           Debug.Log("Closed");
+          // Debug.Log("Closed");
            //close door
            if(open == true)
            {
