@@ -7,10 +7,10 @@ public class SequenceScript : MonoBehaviour
 	//	GLOBAL VARIABLES
 	//	===================================================================
 	//	Number of sequences player must complete in task
-		final int SEQUENCES = 5;
+		public static int SEQUENCES = 5;
 
 	//	Number of control pad arrows before player gets to see which button
-		final int ARROWS = 3;
+		public static int ARROWS = 3;
 	//	===================================================================
 
     int[,] sequences = new int[SEQUENCES, ARROWS + 1];
