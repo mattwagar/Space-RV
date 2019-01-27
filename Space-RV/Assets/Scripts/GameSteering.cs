@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 using System;
 
@@ -31,9 +32,15 @@ public class GameSteering : MonoBehaviour
 	private int timeInSweetSpot = 0;
 	private bool gameOver = false;
 
+	public Slider steerSlider;
+	public BridgeRoom bridge;
+	public PlayerMovement player;
+	public bool isSteering = false;
+	public bool canInteract = false;
+
     void Start()
     {
-        Debug.Log("running");
+       // Debug.Log("running");
 		currentSpeed = SPEED;
 		direction = leftOrRight();
     }
@@ -47,20 +54,45 @@ public class GameSteering : MonoBehaviour
     		return;
     	}
         
-        if (timeInSweetSpot >= WINTIME) 
-        {
+        //if (timeInSweetSpot >= WINTIME) 
+       // {
     //	WIN STATE HERE
-        	Debug.Log("Congratulations!");
-        	gameOver = true;
-        }
+        	//Debug.Log("Congratulations!");
+        	//gameOver = true;
+        //}
         if (Math.Abs(needlePos) > WIDTH) 
         {
     //	LOSE STATE HERE
         	Debug.Log("Bummer you hit like, an asteroid or something");
         	gameOver = true;
         }
+		if(canInteract)
+		{
+			if(Input.GetButtonDown("Fire1"))
+			{
+				isSteering = true;
+				player.canMove = false;
+			}
+			
 
-        listenToControlPad();
+		}
+
+		if(isSteering)
+		{
+
+			listenToControlPad();
+			//press b to exit steering
+			if(Input.GetButtonDown("Fire2"))
+			{
+				isSteering = false;
+				player.canMove = true;				
+			}
+
+
+
+		}
+
+        
     }
 
     void FixedUpdate()
@@ -68,6 +100,7 @@ public class GameSteering : MonoBehaviour
     	if (!gameOver) 
     	{
 	        needlePos += currentSpeed * direction;
+			steerSlider.value = needlePos;
     	}
 
         if (Math.Abs(needlePos) < SWEET) 
@@ -78,17 +111,46 @@ public class GameSteering : MonoBehaviour
         }
     }
 
+	void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canInteract = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canInteract = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canInteract = false;
+        }
+    }
+
     void listenToControlPad()	{
-    	float input = Input.GetAxis("HorizontalL");
+    	float input = Input.GetAxis("Horizontal");
 
     	if (Math.Abs(input) > 0.1) 
     	{
-    		if ((input < 0 && direction > 0) || (input > 0 && direction < 0)) 
+    		if (input < 0) 
     		{
-    			Debug.Log("switch dir");
-    			direction *= -1;
+    			Debug.Log("moving left");
+    			direction = -1;
     		}
-    		currentSpeed += input * ACCEL;
+    		if (input > 0) 
+    		{
+    			Debug.Log("moving right");
+    			direction = 1;
+    		}
+    		currentSpeed += Math.Abs(input) * ACCEL;
     	}
     }
 
