@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameSequence	 : MonoBehaviour
 {
 	//	GLOBAL VARIABLES
 	//	=================================================
 	//	Is the game running
-		public bool gameIsOn = true;
+		public bool gameIsOn = false;
 
 	//	Number of control pad arrows
 	//	before player gets to see which button to press
@@ -29,6 +30,23 @@ public class GameSequence	 : MonoBehaviour
 		public float HAPPY_DOWN = 20.0f;
 	//	=================================================
 
+	public Sprite up;
+	public Sprite down;
+	public Sprite right;
+	public Sprite left;
+
+	public Image space1;
+	public Image space2;
+	public Image space3;
+	public Image space4;
+
+	public Sprite aButton;
+	public Sprite xButton;
+	public Sprite yButton;
+
+	public List<Image> spaces = new List<Image>();
+	public List<Sprite> directions = new List<Sprite>();
+
     int[] sequence;
     bool readyForNextSeq = true;
     bool showLetter = false;
@@ -36,9 +54,23 @@ public class GameSequence	 : MonoBehaviour
     bool listenToPad = true;
     int buttonTimer = 0;
 
+	public bool canInteract;
+	public PlayerMovement player;
+
+	public Slider happyBar;
+
     void Start()
     {
 	    sequence = new int[ARROWS + 1];
+		spaces.Add(space1);
+		spaces.Add(space2);
+		spaces.Add(space3);
+		//spaces.Add(space4);
+
+		directions.Add(up);
+		directions.Add(right);
+		directions.Add(down);
+		directions.Add(left);
     	Debug.Log("sequence game running");
     }
 
@@ -55,6 +87,21 @@ public class GameSequence	 : MonoBehaviour
 
     void Update()
     {
+		happyBar.value = HAPPINESS;
+		if(canInteract)
+		{
+			if(gameIsOn==false)
+			{
+				if(Input.GetButtonDown("Fire1"))
+				{
+				gameIsOn = true;
+				player.canMove = false;
+
+				}
+			}
+			
+		}
+
     	if (gameIsOn) 
     	{
 	    	if (Input.GetButtonDown("Fire3"))
@@ -130,7 +177,33 @@ public class GameSequence	 : MonoBehaviour
 	    	{
 	    		HAPPINESS = 0;
 	    	}
+
+			
     	}
+    }
+
+	void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canInteract = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canInteract = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canInteract = false;
+        }
     }
 
     //	This is the listener to the control pad;
@@ -188,31 +261,52 @@ public class GameSequence	 : MonoBehaviour
     	if (Input.GetButtonDown("Jump"))
     	{
     		letter = 'Y';
+			space4.enabled = false;
+			
+    	}
+    	if (Input.GetButtonDown("Fire3"))
+    	{
+    		letter = 'X';
+			space4.enabled = false;
+			//space4.sprite = xButton;
     	}
     	if (Input.GetButtonDown("Fire1"))
     	{
-    		letter = 'X';
-    	}
-    	if (Input.GetButtonDown("Fire2"))
-    	{
     		letter = 'A';
+			space4.enabled = false;
+			//space4.sprite = aButton;
     	}
     	return letter;
     }
 
     //	Returns button letter mapped to 0-3 from sequence array
     char getSequenceButton()	{
+		for (int i=0; i<3; i++) 
+    	{
+    		//showArrow(sequence[i]);
+			Image currentImage = spaces[i];
+			currentImage.enabled = false;
+
+			currentImage.transform.rotation = Quaternion.Euler(0,0,0);
+			//currentImage.sprite = directions[sequence[i]]; 
+    	}
     	char letter = ' ';
     	switch (sequence[3]) 
     	{
     		case 0:
     		  letter = 'A';
+			  space4.enabled = true;
+			  space4.sprite = aButton;
     		  break;
     		case 1:
     		  letter = 'X';
+			  space4.enabled = true;
+			  space4.sprite = xButton;
     		  break;
     		case 2:
     		  letter = 'Y';
+			  space4.enabled = true;
+			  space4.sprite = yButton;
     		  break;
     	}
 
@@ -242,6 +336,11 @@ Debug.Log("now press " + letter);
     	for (int i=0; i<3; i++) 
     	{
     		showArrow(sequence[i]);
+			Image currentImage = spaces[i];
+
+			currentImage.transform.Rotate(0,0,(-90* sequence[i]));
+			currentImage.enabled = true;
+			//currentImage.sprite = directions[sequence[i]]; 
     	}
 
 
