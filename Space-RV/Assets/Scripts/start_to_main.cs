@@ -16,9 +16,12 @@ public class start_to_main : MonoBehaviour
     {
 
         // Only specifying the sceneName or sceneBuildIndex will load the Scene with the Single mode
-        if (Input.GetKeyDown("Fire1")) {
-            SceneManager.LoadScene("Main", LoadSceneMode.Additive);
+        if (Input.GetButtonDown("Fire1"))
+        {
+            SceneManager.LoadScene("Main");
+            SceneManager.UnloadSceneAsync("Start");
+        }
       
     }
 }
-}
+
