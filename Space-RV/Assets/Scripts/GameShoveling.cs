@@ -5,9 +5,9 @@ using UnityEngine;
 public class GameShoveling : MonoBehaviour
 {
 	//	GLOBAL VARIABLES
-	//	==============================================
-	//	How many frames it takes to dig a shovelful
-		public float DIGTIME = 10;
+	//	===================================================
+	//	How many frames it takes to dig or dump a shovelful
+		public float MOVETIME = 30;
 
 	//	Rate at which the reactor cools when opened
 		public float COOLINGRATE = 0.02f;
@@ -20,12 +20,13 @@ public class GameShoveling : MonoBehaviour
 
 	//	Percentage of bad uranium in the pile
 		public int U_RATIO = 30;
-	//	==============================================
+	//	===================================================
 	//	IMPORTED VALUE - REPLACE
 	//	Current furnace level at start of task
 		public float furnaceTemp = 50.0f;
-	//	==============================================
+	//	===================================================
 
+	//	Constants for the charPosition variable
 	static int START = 0;
 	static int DIG = 1;
 	static int TURN = 2;
@@ -34,13 +35,11 @@ public class GameShoveling : MonoBehaviour
 
 	int charPosition = START;
 	int digTime = 0;
-	bool shovelFull = false;
 	bool goodUranium = true;
 
     void Start()
     {
         Debug.Log("running");
-
     }
 
     void Update()
@@ -55,23 +54,30 @@ public class GameShoveling : MonoBehaviour
 
         switch (charPosition) 
         {
+        	//	From the START state, wait for a button push to start digging
         	case 0:
         	  listenToDig();
         	  break;
+
+        	//	From the DIG state, wait before moving to the next state
         	case 1:
         	  digTime++;
-        	  if (digTime >= DIGTIME) 
+        	  if (digTime >= MOVETIME) 
         	  {
     	  		charPosition = TURN;
     	  		digTime = 0;
         	  }
         	  break;
+
+        	//	Once the shovel is full, wait for another button push
         	case 2:
         	  listenToShovel();
         	  break;
+
+        	//	After emptying shovel, wait before returning to START state
         	case 3:
         	  digTime++;
-        	  if (digTime >= DIGTIME) 
+        	  if (digTime >= MOVETIME) 
         	  {
         	  	charPosition = START;
         	  	digTime = 0;
@@ -79,7 +85,7 @@ public class GameShoveling : MonoBehaviour
         	  break;
         	case 4:
         	  digTime++;
-        	  if (digTime >= DIGTIME) 
+        	  if (digTime >= MOVETIME) 
         	  {
         	  	charPosition = START;
         	  	digTime = 0;
@@ -88,15 +94,18 @@ public class GameShoveling : MonoBehaviour
         }
     }
 
+    //	Furnace loses 1% per minute while open throughout game
     void FixedUpdate()	{
     	furnaceTemp -= COOLINGRATE;
     }
 
     void listenToDig()	{
-        if (Input.GetButtonDown("LB")) 
+    	//	On button press, change position and fill shovel
+        if (Input.GetButtonDown("LB"))
         {
         	charPosition = DIG;
-        	shovelFull = true;
+
+        	//	Determine whether uranium is any good
         	goodUranium = (Random.Range(0, 100) > U_RATIO);
 
         	Debug.Log("shovelful of U; good stuff: " + goodUranium);
@@ -104,13 +113,17 @@ public class GameShoveling : MonoBehaviour
     }
 
     void listenToShovel()	{
+    	//	If uranium is put in furnace, change position and empty shovel
     	if (Input.GetButtonDown("LT")) 
     	{
     		charPosition = ADD;
-    		shovelFull = false;
+
+    		//	Good uranium raises temperature, bad lowers it
     		furnaceTemp = goodUranium
     			? furnaceTemp + GOOD_U
     			: furnaceTemp - BAD_U;
+
+    		//	Check for goal temperature
     		if (furnaceTemp >= 100)
     		{
     //	WIN STATE
@@ -121,10 +134,10 @@ public class GameShoveling : MonoBehaviour
     		Debug.Log("furnace temp " + furnaceTemp);
     	}
 
-    	if (Input.GetButtonDown("RT")) 
+    	//	If uranium is tossed aside, change position and empty shovel
+    	if (Input.GetButtonDown("RT"))
     	{
     		charPosition = TOSS;
-    		shovelFull = false;
     		Debug.Log("tossed aside");
     	}
     }
