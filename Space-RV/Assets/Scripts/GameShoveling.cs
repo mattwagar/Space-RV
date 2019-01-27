@@ -7,7 +7,7 @@ public class GameShoveling : MonoBehaviour
 	//	GLOBAL VARIABLES
 	//	==============================================
 	//	Rate at which the reactor cools when opened
-		public static float COOLINGRATE = 0.02;
+		public static float COOLINGRATE = 0.02f;
 
 	//	Energy added by one shovelful of good uranium
 		public static float GOOD_U = 10.0f;
@@ -27,7 +27,7 @@ public class GameShoveling : MonoBehaviour
 
     void Start()
     {
-        
+        Debug.Log("running");
     }
 
     void Update()
