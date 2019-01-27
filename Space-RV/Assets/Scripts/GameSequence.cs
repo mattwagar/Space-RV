@@ -5,15 +5,16 @@ using UnityEngine;
 public class SequenceScript : MonoBehaviour
 {
 	//	GLOBAL VARIABLES
-	//	===================================================================
-	//	Number of sequences player must complete in task
-		public static int SEQUENCES = 5;
+	//	=================================================
+	//	Number of control pad arrows 
+	//	before player gets to see which button to press
+		public int ARROWS = 3;
 
-	//	Number of control pad arrows before player gets to see which button
-		public static int ARROWS = 3;
-	//	===================================================================
+	//	Time to press button
+		public int BTN_SPEED = 50;
+	//	=================================================
 
-    int[,] sequences = new int[SEQUENCES, ARROWS + 1];
+    int[] sequences = new int[ARROWS + 1];
     bool readyForNextSeq = true;
     bool showLetter = false;
     int currentSeq = 0;
@@ -22,19 +23,16 @@ public class SequenceScript : MonoBehaviour
 
     void Start()
     {
-    	//	Fill the array of sequences with random numbers 0-3
-    	for (int i = 0; i < SEQUENCES; i++) 
-    	{
-    		for (int j = 0; j < ARROWS + 1; j++) 
-    		{
-    			int nextNum = Random.Range(0, 4);
-    			sequences[i, j] = nextNum;
-    		}
-    	}
+    	Debug.Log("running");
     }
 
     void Update()
     {
+    	if (Input.GetButtonDown("Fire3"))
+    	{
+    //	B BUTTON; EXIT GAME
+    	}
+
     	float inputX = Input.GetAxis("Horizontal");
     	float inputY = Input.GetAxis("Vertical");
 
@@ -57,8 +55,9 @@ public class SequenceScript : MonoBehaviour
 	    			Debug.Log("correct");
 	    			currentArrow++;
 	    		}	else {
-	//	CALL LOSE STATE HERE
+	//	CALL START-OVER STATE HERE
 	    			Debug.Log("wrong");
+	    			currentArrow = 0;
 	    		}
 
 	    		//	If the arrow sequence is complete, reveal the button
@@ -166,10 +165,6 @@ public class SequenceScript : MonoBehaviour
     	{
     		letter = 'A';
     	}
-    	if (Input.GetButtonDown("Fire3"))
-    	{
-    		letter = 'B';
-    	}
     	return letter;
     }
 
@@ -182,12 +177,9 @@ public class SequenceScript : MonoBehaviour
     		  letter = 'A';
     		  break;
     		case 1:
-    		  letter = 'B';
-    		  break;
-    		case 2:
     		  letter = 'X';
     		  break;
-    		case 3:
+    		case 2:
     		  letter = 'Y';
     		  break;
     	}
