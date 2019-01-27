@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     bool canRide = false;
     bool dash = false;
 
+    public bool canMove = true;
+
     void Start(){
         originalLayer = sprite.sortingOrder;
         Debug.Log("Layer" + originalLayer);
@@ -36,7 +38,22 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if(canMove)
+        {
+            Movement();
+        }
+
+        else
+        {
+            if(canMove == false)
+            {
+                if(Input.GetButtonDown("Fire2"))
+                {
+                    canMove = true;
+                }
+            }
+        }
+        
         if(canCallElevator)
         {
             if(Input.GetButtonDown("Fire1"))
@@ -111,6 +128,8 @@ public class PlayerMovement : MonoBehaviour
         }
         
     }
+
+    
 
 //handles player movement 
     void Movement()
