@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameShoveling : MonoBehaviour
 {
@@ -52,9 +53,20 @@ public class GameShoveling : MonoBehaviour
 	public PlayerMovement player;
 	public GameObject goodSprite;
 	public GameObject badSprite;
+	public Slider tempGauge;
+
+
+
+	//reference UI shit
+	public GameObject pressLB;
+	public GameObject pressUse;
+	public GameObject openReactor;
 
     void Start()
     {
+		pressLB.SetActive(false);
+		pressUse.SetActive(false);
+		openReactor.SetActive(false);
         //Debug.Log("running");
     }
 
@@ -72,7 +84,9 @@ public class GameShoveling : MonoBehaviour
         {
         	//	From the START state, wait for a button push to start digging
         	case 0:
+			openReactor.SetActive(false);
         	  listenToDig();
+			  
         	  break;
 
         	//	From the DIG state, wait before moving to the next state
@@ -87,6 +101,7 @@ public class GameShoveling : MonoBehaviour
 
         	//	Once the shovel is full, wait for another button push
         	case 2:
+				
         	  listenToShovel();
         	  break;
 
@@ -108,6 +123,8 @@ public class GameShoveling : MonoBehaviour
         	  }
         	  break;
         }
+
+		tempGauge.value = furnaceTemp;
     }
 
     //	Furnace loses 1% per minute while open throughout game
@@ -137,18 +154,25 @@ public class GameShoveling : MonoBehaviour
 		{
 			inReactor = false;
 			shovelSprite.enabled = true;
+			pressLB.SetActive(false);
 		}
 	}
     void listenToDig()	{
     	//	On button press, change position and fill shovel
 		if(inReactor)
 		{
+			if(shovelGameActive == false)
+			{
+				pressLB.SetActive(true);
+			}
 			if (Input.GetButtonDown("LB"))
         	{
 			if(shovelGameActive == false)
 				{
 					shovelGameActive = true;
 				}
+			pressLB.SetActive(false);
+			pressUse.SetActive(true);
         	charPosition = DIG;
 			shovelSprite.enabled=false;
 			player.canMove = false;
@@ -199,11 +223,14 @@ public class GameShoveling : MonoBehaviour
 					badSprite.SetActive(false);
 				}
 
+				pressUse.SetActive(false);
+
 			}
 
 			else
 			{
 				Debug.Log("Reactor is closed!");
+				openReactor.SetActive(true);
 			}
 
     		
@@ -236,7 +263,8 @@ public class GameShoveling : MonoBehaviour
 				{
 					badSprite.SetActive(false);
 				}
-
+			pressUse.SetActive(false);
+			openReactor.SetActive(false);
     	}
     }
 }
