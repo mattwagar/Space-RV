@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using System;
 
@@ -28,6 +29,7 @@ public class EndGame : MonoBehaviour
         if (timeBeforeFinish <= 0) 
         {
         	WIN_GAME = true;
+			SceneManager.LoadScene("WIN");
         }
 
         if (kids.HAPPINESS <= 0
@@ -36,6 +38,7 @@ public class EndGame : MonoBehaviour
         	) 
         {
         	LOSE_GAME = true;
+			SceneManager.LoadScene("LOSE", LoadSceneMode.Single);
         }
     }
 }

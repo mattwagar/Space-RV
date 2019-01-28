@@ -59,6 +59,8 @@ public class GameSequence	 : MonoBehaviour
 
 	public Slider happyBar;
 
+	public GameObject interactPrompt;
+
     void Start()
     {
 	    sequence = new int[ARROWS + 1];
@@ -72,6 +74,7 @@ public class GameSequence	 : MonoBehaviour
 		directions.Add(down);
 		directions.Add(left);
     	Debug.Log("sequence game running");
+		interactPrompt.SetActive(false);
     }
 
     void FixedUpdate()	{
@@ -109,6 +112,8 @@ public class GameSequence	 : MonoBehaviour
 	    		gameIsOn = false;
 	    //	B BUTTON; EXIT GAME
 	    	}
+
+			interactPrompt.SetActive(false);
 
 	    	//	The readyForNextSeq boolean is so that the Debug Console will only 
 	    	//	show thre next sequence once; it may not be necessary
@@ -187,6 +192,7 @@ public class GameSequence	 : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             canInteract = true;
+			interactPrompt.SetActive(true);
         }
     }
 
@@ -203,6 +209,7 @@ public class GameSequence	 : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             canInteract = false;
+			interactPrompt.SetActive(false);
         }
     }
 
