@@ -16,8 +16,8 @@ public class win_to_start : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            SceneManager.LoadScene("Start");
-            SceneManager.UnloadSceneAsync("Win");
+            SceneManager.LoadScene("Start_Menu");
+           // SceneManager.UnloadSceneAsync("Win");
         }
 
     }
