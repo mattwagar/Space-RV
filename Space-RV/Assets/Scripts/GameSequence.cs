@@ -109,14 +109,29 @@ public class GameSequence	 : MonoBehaviour
     	{
 	    	if (Input.GetButtonDown("Fire3"))
 	    	{
+    //	B BUTTON; EXIT GAME
+	    		//	turn off all contents of Update()
 	    		gameIsOn = false;
-	    //	B BUTTON; EXIT GAME
+
+	    		//	reset all booleans and counters to game start
+	    		bool readyForNextSeq = true;
+	    		bool showLetter = false;
+	    		int currentArrow = 0;
+	    		bool listenToPad = true;
+	    		int buttonTimer = 0;
+
+	    		//	remove arrows and letters from screen
+				for (int i=0; i<3; i++) 
+		    	{
+					Image currentImage = spaces[i];
+					currentImage.enabled = false;
+					currentImage.transform.rotation = Quaternion.Euler(0,0,0);
+		    	}
+				space4.enabled = false;
 	    	}
 
 			interactPrompt.SetActive(false);
 
-	    	//	The readyForNextSeq boolean is so that the Debug Console will only 
-	    	//	show thre next sequence once; it may not be necessary
 	    	if (readyForNextSeq) 
 	    	{
 		        displayNext();
