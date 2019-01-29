@@ -15,7 +15,7 @@ public class GameSequence	 : MonoBehaviour
 		public int ARROWS = 3;
 
 	//	Time to press button
-		public int BTN_SPEED = 100;
+		public int BTN_SPEED = 50;
 
 	//	Kids' happiness meter
 		public float HAPPINESS = 100.0f;
@@ -162,6 +162,7 @@ public class GameSequence	 : MonoBehaviour
 	    			readyForNextSeq = true;
 	    			showLetter = false;
 	    			buttonTimer = 0;
+					space4.enabled = false;
 	    		}
 	    		//	Send the sequence number, get back the button letter
 	    		char button = getSequenceButton();
@@ -187,6 +188,7 @@ public class GameSequence	 : MonoBehaviour
 	    			readyForNextSeq = true;
 	    			buttonTimer = 0;
 	    			showLetter = false;
+					space4.enabled = false;
 	    		}
 	    	}
 
@@ -283,19 +285,19 @@ public class GameSequence	 : MonoBehaviour
     	if (Input.GetButtonDown("Jump"))
     	{
     		letter = 'Y';
-			space4.enabled = false;
+			// space4.enabled = false;
 			
     	}
     	if (Input.GetButtonDown("Fire3"))
     	{
     		letter = 'X';
-			space4.enabled = false;
+			// space4.enabled = false;
 			//space4.sprite = xButton;
     	}
     	if (Input.GetButtonDown("Fire1"))
     	{
     		letter = 'A';
-			space4.enabled = false;
+			// space4.enabled = false;
 			//space4.sprite = aButton;
     	}
     	return letter;
@@ -344,6 +346,7 @@ Debug.Log("now press " + letter);
 
     // Traverses arrow portion of current sequence
     void displayNext()	{
+    Debug.Log("new sequence");
     	readyForNextSeq = false;
     	currentArrow = 0;
 
