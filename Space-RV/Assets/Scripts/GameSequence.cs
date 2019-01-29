@@ -60,6 +60,9 @@ public class GameSequence	 : MonoBehaviour
 	public Slider happyBar;
 
 	public GameObject interactPrompt;
+	private Vector3 ogSize;
+	private Vector3 closed;
+	public JuicyInteract uiPop;
 
     void Start()
     {
@@ -74,6 +77,11 @@ public class GameSequence	 : MonoBehaviour
 		directions.Add(down);
 		directions.Add(left);
     	Debug.Log("sequence game running");
+
+		closed = new Vector3(0,0,0);
+		ogSize = interactPrompt.transform.localScale;
+
+		interactPrompt.transform.localScale = closed;
 		interactPrompt.SetActive(false);
     }
 
@@ -97,8 +105,8 @@ public class GameSequence	 : MonoBehaviour
 			{
 				if(Input.GetButtonDown("Fire1"))
 				{
-				gameIsOn = true;
-				player.canMove = false;
+					gameIsOn = true;
+					player.canMove = false;
 
 				}
 			}
@@ -110,6 +118,8 @@ public class GameSequence	 : MonoBehaviour
 	    	if (Input.GetButtonDown("Fire3"))
 	    	{
 	    		gameIsOn = false;
+				interactPrompt.SetActive(true);
+				uiPop.StartCoroutine(uiPop.UIPop(interactPrompt.transform.localScale,ogSize,interactPrompt));
 	    //	B BUTTON; EXIT GAME
 	    	}
 
@@ -191,8 +201,9 @@ public class GameSequence	 : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            canInteract = true;
+            canInteract = true;			
 			interactPrompt.SetActive(true);
+			uiPop.StartCoroutine(uiPop.UIPop(interactPrompt.transform.localScale,ogSize,interactPrompt));
         }
     }
 
@@ -209,6 +220,7 @@ public class GameSequence	 : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             canInteract = false;
+			uiPop.StartCoroutine(uiPop.UIPop(interactPrompt.transform.localScale,closed,interactPrompt));
 			interactPrompt.SetActive(false);
         }
     }

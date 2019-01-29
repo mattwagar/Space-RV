@@ -18,11 +18,19 @@ public class ElevatorController : MonoBehaviour
     bool ridingElevator = false;
     bool elevatorArrived = false;
 
+    public JuicyInteract uiPop;
+    public GameObject ui;
+    private Vector3 closed;
+    private Vector3 ogSize;
+
    // public bool elevatorCalled;
     // Start is called before the first frame update
     void Start()
     {
         firstFloorPos = transform.position;
+        closed = new Vector3(0,0,0);
+        ogSize = ui.transform.localScale;
+        ui.transform.localScale = closed;
     }
 
     void Update()
@@ -32,6 +40,25 @@ public class ElevatorController : MonoBehaviour
           // player.transform.position = elevator.transform.position;
        //}
 
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            ui.SetActive(true);
+            uiPop.StartCoroutine(uiPop.UIPop(ui.transform.localScale,ogSize,ui));
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            
+            uiPop.StartCoroutine(uiPop.UIPop(ui.transform.localScale,closed,ui));
+            ui.SetActive(false);
+        }
     }
     public void CallElevator(int floor)
     {

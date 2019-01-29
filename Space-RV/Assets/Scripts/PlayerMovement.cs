@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start(){
         originalLayer = sprite.sortingOrder;
-        Debug.Log("Layer" + originalLayer);
+       // Debug.Log("Layer" + originalLayer);
         elevator = elevatorObj.GetComponent<ElevatorController>();
 
     }
@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
             floor = 2;
             canCallElevator = true;
         }
-        Debug.Log(floor);
+        //Debug.Log(floor);
     }
 
     void OnTriggerStay2D(Collider2D col)
