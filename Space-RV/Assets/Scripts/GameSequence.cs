@@ -21,7 +21,7 @@ public class GameSequence	 : MonoBehaviour
 		public float HAPPINESS = 100.0f;
 
 	//	Rate of happiness decrease when idle
-		public float IDLE_HANDS = 0.01f;
+		public float IDLE_HANDS = 0.02f;
 
 	//	Add to kids' happiness on win
 		public float HAPPY_UP = 10.0f;
