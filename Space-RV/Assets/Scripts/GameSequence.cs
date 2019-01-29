@@ -107,7 +107,7 @@ public class GameSequence	 : MonoBehaviour
 
     	if (gameIsOn) 
     	{
-	    	if (Input.GetButtonDown("Fire3"))
+	    	if (Input.GetButtonDown("Fire2"))
 	    	{
     //	B BUTTON; EXIT GAME
 	    		//	turn off all contents of Update()
