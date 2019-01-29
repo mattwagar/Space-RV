@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
         else
         {
+            //press b to reactivate movement
             if(canMove == false)
             {
                 if(Input.GetButtonDown("Fire2"))
