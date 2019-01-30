@@ -91,14 +91,18 @@ public class GameSequence	 : MonoBehaviour
     void Update()
     {
 		happyBar.value = HAPPINESS;
+
+		//if inside the kid's room
 		if(canInteract)
 		{
 			if(gameIsOn==false)
 			{
 				if(Input.GetButtonDown("Fire1"))
 				{
-				gameIsOn = true;
-				player.canMove = false;
+					gameIsOn = true;
+					player.canMove = false;
+					interactPrompt.SetActive(false);
+					readyForNextSeq = true;
 
 				}
 			}
@@ -114,11 +118,11 @@ public class GameSequence	 : MonoBehaviour
 	    		gameIsOn = false;
 
 	    		//	reset all booleans and counters to game start
-	    		bool readyForNextSeq = true;
-	    		bool showLetter = false;
-	    		int currentArrow = 0;
-	    		bool listenToPad = true;
-	    		int buttonTimer = 0;
+	    		//readyForNextSeq = true;
+	    		showLetter = false;
+	    		currentArrow = 0;
+	    		listenToPad = true;
+	    		buttonTimer = 0;
 
 	    		//	remove arrows and letters from screen
 				for (int i=0; i<3; i++) 
@@ -126,11 +130,14 @@ public class GameSequence	 : MonoBehaviour
 					Image currentImage = spaces[i];
 					currentImage.enabled = false;
 					currentImage.transform.rotation = Quaternion.Euler(0,0,0);
+				//	Debug.Log("for is running");
 		    	}
 				space4.enabled = false;
+				interactPrompt.SetActive(true);
+				//Debug.Log("Last sprite should turn off");
 	    	}
 
-			interactPrompt.SetActive(false);
+		
 
 	    	if (readyForNextSeq) 
 	    	{
