@@ -1008,6 +1008,7 @@ MonoBehaviour:
   goodText: {fileID: 233847932}
   steerUI: {fileID: 1156536737}
   uiPop: {fileID: 1760885586}
+  Bridge: {fileID: 976796611}
 --- !u!61 &266825245
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3442,6 +3443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiPop: {fileID: 1760885586}
   pilotText: {fileID: 1922290135}
+  ogSize: {x: 0, y: 0, z: 0}
 --- !u!61 &976796613
 BoxCollider2D:
   m_ObjectHideFlags: 0

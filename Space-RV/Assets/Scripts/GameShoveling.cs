@@ -105,7 +105,7 @@ public class GameShoveling : MonoBehaviour
         {
         	//	From the START state, wait for a button push to start digging
         	case 0:
-			openReactor.SetActive(false);
+			  openReactor.SetActive(false);
         	  listenToDig();
 			  
         	  break;
@@ -248,7 +248,13 @@ public class GameShoveling : MonoBehaviour
     		furnaceTemp = goodUranium
     			? furnaceTemp + GOOD_U
     			: furnaceTemp - BAD_U;
+				player.animator.SetBool("Shoveling", false);
 				player.animator.SetTrigger("Throw");
+				shovelGameActive = false;
+				
+			
+				
+				
 				if(goodSprite.activeSelf== true)
 				{
 					goodSprite.SetActive(false);
@@ -278,6 +284,8 @@ public class GameShoveling : MonoBehaviour
     	//	WIN STATE
     		furnaceTemp = 100;
     		Debug.Log("furnace is full");
+			player.animator.SetBool("Shoveling", false);
+			player.animator.SetTrigger("Throw");
     		return;
     	}
     	//Debug.Log("furnace temp " + furnaceTemp);

@@ -10,7 +10,8 @@ public class BridgeUI : MonoBehaviour
 
     public GameObject pilotText;
     private Vector3 closed;
-    private Vector3 ogSize;
+    [HideInInspector]
+    public Vector3 ogSize;
 
 
     void Start()

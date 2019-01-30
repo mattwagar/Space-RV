@@ -54,6 +54,7 @@ public class GameSteering : MonoBehaviour
 	private Vector3 ogSizeGood;
 	private Vector3 closed;
 
+	public GameObject Bridge;
 	bool goodCountdown = false;
 
     void Start()
@@ -63,12 +64,12 @@ public class GameSteering : MonoBehaviour
 		direction = leftOrRight();
 
 		closed = new Vector3(0,0,0);
-		ogSizePilot = pilotUI.transform.localScale;
+		
 		ogSizeSlider = sliderUI.transform.localScale;
 		ogSizeGood = goodText.transform.localScale;
 		ogSizeSteer = steerUI.transform.localScale;
 
-		pilotUI.transform.localScale = closed;
+		//pilotUI.transform.localScale = closed;
 		sliderUI.transform.localScale = closed;
 		goodText.transform.localScale = closed;
 		steerUI.transform.localScale = closed;
@@ -78,6 +79,11 @@ public class GameSteering : MonoBehaviour
 		
 
     }
+
+	void LateStart()
+	{
+		ogSizePilot = bridge.gameObject.GetComponent<BridgeUI>().ogSize;
+	}
 
     void Update()
     {
