@@ -62,11 +62,32 @@ public class GameShoveling : MonoBehaviour
 	public GameObject pressUse;
 	public GameObject openReactor;
 
+	public JuicyInteract juicyInteract;
+
+	private Vector3 pressLBSize;
+	private Vector3 pressUseSize;
+	private Vector3 openReactorSize;
+
+	private Vector3 closed;
+	
+
     void Start()
     {
+		//get the original scales of the UI
+		pressLBSize = pressLB.transform.localScale;
+		pressUseSize = pressUse.transform.localScale;
+		openReactorSize = openReactor.transform.localScale;
+
+
+		closed = new Vector3(0,0,0);
+
 		pressLB.SetActive(false);
 		pressUse.SetActive(false);
 		openReactor.SetActive(false);
+
+		pressLB.transform.localScale = closed;
+		pressUse.transform.localScale = closed;
+		openReactor.transform.localScale = closed;
         //Debug.Log("running");
     }
 
@@ -84,7 +105,7 @@ public class GameShoveling : MonoBehaviour
         {
         	//	From the START state, wait for a button push to start digging
         	case 0:
-			openReactor.SetActive(false);
+			  openReactor.SetActive(false);
         	  listenToDig();
 			  
         	  break;
@@ -154,7 +175,12 @@ public class GameShoveling : MonoBehaviour
 		{
 			inReactor = false;
 			shovelSprite.enabled = true;
-			pressLB.SetActive(false);
+			if(pressLB.activeSelf)
+			{
+				juicyInteract.StartCoroutine(juicyInteract.UIPop(pressLB.transform.localScale, closed, pressLB));
+				pressLB.SetActive(false);
+			}
+			
 		}
 	}
     void listenToDig()	{
@@ -163,37 +189,46 @@ public class GameShoveling : MonoBehaviour
 		{
 			if(shovelGameActive == false)
 			{
-				pressLB.SetActive(true);
+				if(pressLB.activeSelf == false)
+				{
+					pressLB.SetActive(true);
+					juicyInteract.StartCoroutine(juicyInteract.UIPop(pressLB.transform.localScale, pressLBSize, pressLB));
+				
+				}
+				
 			}
 			if (Input.GetButtonDown("LB"))
         	{
-			if(shovelGameActive == false)
+				if(shovelGameActive == false)
 				{
 					shovelGameActive = true;
 				}
-			pressLB.SetActive(false);
-			pressUse.SetActive(true);
-        	charPosition = DIG;
-			shovelSprite.enabled=false;
-			player.canMove = false;
-			player.animator.SetBool("Shoveling", true);
-			player.animator.SetTrigger("Dig");
+				juicyInteract.StartCoroutine(juicyInteract.UIPop(pressLB.transform.localScale, closed, pressLB));
+				pressLB.SetActive(false);
+				
+				pressUse.SetActive(true);
+				juicyInteract.StartCoroutine(juicyInteract.UIPop(pressLB.transform.localScale, pressUseSize, pressUse));
+				charPosition = DIG;
+				shovelSprite.enabled=false;
+				player.canMove = false;
+				player.animator.SetBool("Shoveling", true);
+				player.animator.SetTrigger("Dig");
 
 
-        	//	Determine whether uranium is any good
-        	goodUranium = (Random.Range(0, 100) > U_RATIO);
+				//	Determine whether uranium is any good
+				goodUranium = (Random.Range(0, 100) > U_RATIO);
 
-        	Debug.Log("shovelful of U; good stuff: " + goodUranium);
-			if(goodUranium)
-			{
-				goodSprite.SetActive(true);
+				Debug.Log("shovelful of U; good stuff: " + goodUranium);
+				if(goodUranium)
+				{
+					goodSprite.SetActive(true);
 
-			}
+				}
 
-			else
-			{
-				badSprite.SetActive(true);
-			}
+				else
+				{
+					badSprite.SetActive(true);
+				}
         	}
 		}
         
@@ -213,7 +248,13 @@ public class GameShoveling : MonoBehaviour
     		furnaceTemp = goodUranium
     			? furnaceTemp + GOOD_U
     			: furnaceTemp - BAD_U;
+				player.animator.SetBool("Shoveling", false);
 				player.animator.SetTrigger("Throw");
+				shovelGameActive = false;
+				
+			
+				
+				
 				if(goodSprite.activeSelf== true)
 				{
 					goodSprite.SetActive(false);
@@ -222,7 +263,7 @@ public class GameShoveling : MonoBehaviour
 				{
 					badSprite.SetActive(false);
 				}
-
+				juicyInteract.StartCoroutine(juicyInteract.UIPop(pressUse.transform.localScale, closed, pressUse));
 				pressUse.SetActive(false);
 
 			}
@@ -230,6 +271,7 @@ public class GameShoveling : MonoBehaviour
 			else
 			{
 				Debug.Log("Reactor is closed!");
+				juicyInteract.StartCoroutine(juicyInteract.UIPop(openReactor.transform.localScale, openReactorSize, openReactor));
 				openReactor.SetActive(true);
 			}
 
@@ -242,6 +284,8 @@ public class GameShoveling : MonoBehaviour
     	//	WIN STATE
     		furnaceTemp = 100;
     		Debug.Log("furnace is full");
+			player.animator.SetBool("Shoveling", false);
+			player.animator.SetTrigger("Throw");
     		return;
     	}
     	//Debug.Log("furnace temp " + furnaceTemp);
@@ -263,8 +307,14 @@ public class GameShoveling : MonoBehaviour
 				{
 					badSprite.SetActive(false);
 				}
+			
 			pressUse.SetActive(false);
-			openReactor.SetActive(false);
+			if(openReactor.activeSelf)
+			{
+				juicyInteract.StartCoroutine(juicyInteract.UIPop(openReactor.transform.localScale, closed, openReactor));
+				openReactor.SetActive(false);
+			}
+			
     	}
     }
 }

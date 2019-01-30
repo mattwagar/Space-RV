@@ -7,23 +7,28 @@ public class ReactorControl : MonoBehaviour
     SpriteRenderer reactor;
     public Sprite reactorOpen;
     public Sprite reactorClosed;
+    public JuicyInteract uiPop;
+
+    public GameObject button;
+
+    private Vector3 ogSize;
+    private Vector3 closed;
 
     public bool open;
+    private bool canOpen;
     // Start is called before the first frame update
     void Start()
     {
         reactor = GetComponent<SpriteRenderer>();
-    }
+        closed = new Vector3(0,0,0);
+        ogSize = button.transform.localScale;
+        button.transform.localScale = closed;
+        button.SetActive(false);
+    }  
 
-    // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    void OnTriggerStay2D(Collider2D other)
-    {
-        if(other.gameObject.tag == "Player")
+        if(canOpen == true)
         {
             if(Input.GetButtonDown("Fire1"))
             {
@@ -41,6 +46,40 @@ public class ReactorControl : MonoBehaviour
                 }
             }
         }
+        
+    }
+    
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canOpen = true;
+            button.SetActive(true);
+            uiPop.StartCoroutine(uiPop.UIPop(button.transform.localScale,ogSize,button));
+        }
+    }
+
+    
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canOpen = true;
+        }
+            
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            canOpen = false;
+            uiPop.StartCoroutine(uiPop.UIPop(button.transform.localScale,closed,button));
+            button.SetActive(false);
+        }
+
     }
 
   //  public void Interact()

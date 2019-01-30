@@ -15,13 +15,13 @@ public class GameSequence	 : MonoBehaviour
 		public int ARROWS = 3;
 
 	//	Time to press button
-		public int BTN_SPEED = 100;
+		public int BTN_SPEED = 50;
 
 	//	Kids' happiness meter
 		public float HAPPINESS = 100.0f;
 
 	//	Rate of happiness decrease when idle
-		public float IDLE_HANDS = 0.01f;
+		public float IDLE_HANDS = 0.02f;
 
 	//	Add to kids' happiness on win
 		public float HAPPY_UP = 10.0f;
@@ -91,14 +91,18 @@ public class GameSequence	 : MonoBehaviour
     void Update()
     {
 		happyBar.value = HAPPINESS;
+
+		//if inside the kid's room
 		if(canInteract)
 		{
 			if(gameIsOn==false)
 			{
 				if(Input.GetButtonDown("Fire1"))
 				{
-				gameIsOn = true;
-				player.canMove = false;
+					gameIsOn = true;
+					player.canMove = false;
+					interactPrompt.SetActive(false);
+					readyForNextSeq = true;
 
 				}
 			}
@@ -107,16 +111,34 @@ public class GameSequence	 : MonoBehaviour
 
     	if (gameIsOn) 
     	{
-	    	if (Input.GetButtonDown("Fire3"))
+	    	if (Input.GetButtonDown("Fire2"))
 	    	{
+    //	B BUTTON; EXIT GAME
+	    		//	turn off all contents of Update()
 	    		gameIsOn = false;
-	    //	B BUTTON; EXIT GAME
+
+	    		//	reset all booleans and counters to game start
+	    		//readyForNextSeq = true;
+	    		showLetter = false;
+	    		currentArrow = 0;
+	    		listenToPad = true;
+	    		buttonTimer = 0;
+
+	    		//	remove arrows and letters from screen
+				for (int i=0; i<3; i++) 
+		    	{
+					Image currentImage = spaces[i];
+					currentImage.enabled = false;
+					currentImage.transform.rotation = Quaternion.Euler(0,0,0);
+				//	Debug.Log("for is running");
+		    	}
+				space4.enabled = false;
+				interactPrompt.SetActive(true);
+				//Debug.Log("Last sprite should turn off");
 	    	}
 
-			interactPrompt.SetActive(false);
+		
 
-	    	//	The readyForNextSeq boolean is so that the Debug Console will only 
-	    	//	show thre next sequence once; it may not be necessary
 	    	if (readyForNextSeq) 
 	    	{
 		        displayNext();
@@ -147,6 +169,7 @@ public class GameSequence	 : MonoBehaviour
 	    			readyForNextSeq = true;
 	    			showLetter = false;
 	    			buttonTimer = 0;
+					space4.enabled = false;
 	    		}
 	    		//	Send the sequence number, get back the button letter
 	    		char button = getSequenceButton();
@@ -172,6 +195,7 @@ public class GameSequence	 : MonoBehaviour
 	    			readyForNextSeq = true;
 	    			buttonTimer = 0;
 	    			showLetter = false;
+					space4.enabled = false;
 	    		}
 	    	}
 
@@ -268,19 +292,19 @@ public class GameSequence	 : MonoBehaviour
     	if (Input.GetButtonDown("Jump"))
     	{
     		letter = 'Y';
-			space4.enabled = false;
+			// space4.enabled = false;
 			
     	}
     	if (Input.GetButtonDown("Fire3"))
     	{
     		letter = 'X';
-			space4.enabled = false;
+			// space4.enabled = false;
 			//space4.sprite = xButton;
     	}
     	if (Input.GetButtonDown("Fire1"))
     	{
     		letter = 'A';
-			space4.enabled = false;
+			// space4.enabled = false;
 			//space4.sprite = aButton;
     	}
     	return letter;
@@ -329,6 +353,7 @@ Debug.Log("now press " + letter);
 
     // Traverses arrow portion of current sequence
     void displayNext()	{
+    Debug.Log("new sequence");
     	readyForNextSeq = false;
     	currentArrow = 0;
 

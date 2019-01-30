@@ -41,12 +41,49 @@ public class GameSteering : MonoBehaviour
 	public bool canInteract = false;
 	public bool countdownRunning = false;
 
+	public GameObject sliderUI;
+	public GameObject pilotUI;
+	public GameObject goodText;
+	public GameObject steerUI;
+
+	public JuicyInteract uiPop;
+
+	private Vector3 ogSizePilot;
+	private Vector3 ogSizeSteer;
+	private Vector3 ogSizeSlider;
+	private Vector3 ogSizeGood;
+	private Vector3 closed;
+
+	public GameObject Bridge;
+	bool goodCountdown = false;
+
     void Start()
     {
        // Debug.Log("running");
 		currentSpeed = SPEED;
 		direction = leftOrRight();
+
+		closed = new Vector3(0,0,0);
+		
+		ogSizeSlider = sliderUI.transform.localScale;
+		ogSizeGood = goodText.transform.localScale;
+		ogSizeSteer = steerUI.transform.localScale;
+
+		//pilotUI.transform.localScale = closed;
+		sliderUI.transform.localScale = closed;
+		goodText.transform.localScale = closed;
+		steerUI.transform.localScale = closed;
+
+		goodText.SetActive(false);
+		steerUI.SetActive(false);
+		
+
     }
+
+	void LateStart()
+	{
+		ogSizePilot = bridge.gameObject.GetComponent<BridgeUI>().ogSize;
+	}
 
     void Update()
     {
@@ -57,12 +94,20 @@ public class GameSteering : MonoBehaviour
     		return;
     	}
         
-        if (timeInSweetSpot >= WINTIME) 
+        if (timeInSweetSpot >= WINTIME && isSteering) 
         {
     //	WIN STATE HERE
         	//Debug.Log("Congratulations!");
         	gameOver = true;
+			goodText.SetActive(true);
+			uiPop.StartCoroutine(uiPop.UIPop(goodText.transform.localScale, ogSizeGood, goodText));
+			uiPop.StartCoroutine(uiPop.UIPop(sliderUI.transform.localScale, closed, sliderUI));
+			sliderUI.SetActive(false);	
+			player.canMove = true;		
+			isSteering = false;	
+
 			StartCoroutine(CountdownNext());
+			StartCoroutine(CountdownCloseGood());
         }
         if (Math.Abs(needlePos) > WIDTH) 
         {
@@ -70,12 +115,37 @@ public class GameSteering : MonoBehaviour
         	Debug.Log("Bummer you hit like, an asteroid or something");
         	gameOver = true;
         }
+
+		if(Math.Abs(needlePos)>SWEET)
+		{
+			if(steerUI.activeSelf==false && isSteering == false)
+			{
+				steerUI.SetActive(true);
+				uiPop.StartCoroutine(uiPop.UIPop(steerUI.transform.localScale, ogSizeSteer , steerUI));
+			}
+			
+		}
 		if(canInteract)
 		{
+			//press A to interact
 			if(Input.GetButtonDown("Fire1"))
 			{
 				isSteering = true;
 				player.canMove = false;
+				canInteract = false;
+				uiPop.StartCoroutine(uiPop.UIPop(pilotUI.transform.localScale, closed, pilotUI));
+				pilotUI.SetActive(false);
+				sliderUI.SetActive(true);
+				uiPop.StartCoroutine(uiPop.UIPop(sliderUI.transform.localScale, ogSizeSlider, sliderUI));
+
+				if(steerUI.activeSelf)
+				{
+					
+					uiPop.StartCoroutine(uiPop.UIPop(steerUI.transform.localScale, closed, steerUI));
+					steerUI.SetActive(false);
+				}
+
+			
 			}
 			
 
@@ -154,7 +224,14 @@ public class GameSteering : MonoBehaviour
 			{
 				Debug.Log("Not Steering");
 				isSteering = false;
-				player.canMove = true;				
+				player.canMove = true;
+				canInteract = true;	
+				pilotUI.SetActive(true);
+				uiPop.StartCoroutine(uiPop.UIPop(pilotUI.transform.localScale, ogSizePilot, pilotUI));
+				
+				
+				uiPop.StartCoroutine(uiPop.UIPop(sliderUI.transform.localScale, closed, sliderUI));
+				sliderUI.SetActive(false);			
 			}
     }
 
@@ -180,9 +257,27 @@ public class GameSteering : MonoBehaviour
 		yield return new WaitForSeconds(count);
 		gameOver = false;
 		timeInSweetSpot = 0;
-		Debug.Log("Game Starting again");
+		Debug.Log("Steer Game Starting again");
 		currentSpeed = SPEED;
 		isSteering = false;
 		countdownRunning = false;
+	}
+
+	IEnumerator CountdownCloseGood()
+	{
+		if(goodCountdown)
+		{
+			yield break;
+		}
+
+		goodCountdown = true;
+		int count = 2;
+
+		yield return new WaitForSeconds(count);
+		
+		uiPop.StartCoroutine(uiPop.UIPop(goodText.transform.localScale, closed, goodText));
+		goodText.SetActive(false);
+		goodCountdown = false;
+
 	}
 }
