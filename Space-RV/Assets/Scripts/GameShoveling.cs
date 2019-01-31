@@ -61,8 +61,16 @@ public class GameShoveling : MonoBehaviour
 	public GameObject pressLB;
 	public GameObject pressUse;
 	public GameObject openReactor;
+	public GameObject lowFuel;
+	public GameObject badU;
+	public GameObject goodU;
 
 	public JuicyInteract juicyInteract;
+
+	Vector3 lowFuelSize;
+	Vector3 badUSize;
+	Vector3 goodUSize;
+
 
 	private Vector3 pressLBSize;
 	private Vector3 pressUseSize;
@@ -77,6 +85,10 @@ public class GameShoveling : MonoBehaviour
 		pressLBSize = pressLB.transform.localScale;
 		pressUseSize = pressUse.transform.localScale;
 		openReactorSize = openReactor.transform.localScale;
+		lowFuelSize = lowFuel.transform.localScale;
+		badUSize = badU.transform.localScale;
+		goodUSize = goodU.transform.localScale;
+
 
 
 		closed = new Vector3(0,0,0);
@@ -85,9 +97,16 @@ public class GameShoveling : MonoBehaviour
 		pressUse.SetActive(false);
 		openReactor.SetActive(false);
 
+
+		goodU.SetActive(false);
+		badU.SetActive(false);
+		lowFuel.SetActive(false);
 		pressLB.transform.localScale = closed;
 		pressUse.transform.localScale = closed;
 		openReactor.transform.localScale = closed;
+		lowFuel.transform.localScale = closed;
+		badU.transform.localScale = closed;
+		goodU.transform.localScale = closed;
         //Debug.Log("running");
     }
 
@@ -100,12 +119,40 @@ public class GameShoveling : MonoBehaviour
 			Debug.Log("furnace went out");
 			return;
 		}
+//warn the player
+		if(furnaceTemp <= 20)
+		{
+			lowFuel.SetActive(true);
+			juicyInteract.StartCoroutine(juicyInteract.UIPop(lowFuel.transform.localScale, lowFuelSize, lowFuel));
+		}
 
+		if(furnaceTemp > 20)
+		{
+			juicyInteract.StartCoroutine(juicyInteract.UIPop(lowFuel.transform.localScale, closed, lowFuel));
+			lowFuel.SetActive(false);
+		}
         switch (charPosition) 
         {
         	//	From the START state, wait for a button push to start digging
         	case 0:
-			  openReactor.SetActive(false);
+				if(openReactor.activeSelf)
+				{
+					openReactor.SetActive(false);
+					openReactor.transform.localScale = closed;
+				}
+				if(goodU.activeSelf)
+				{
+					juicyInteract.StartCoroutine(juicyInteract.UIPop(goodU.transform.localScale, closed, goodU));
+					goodU.SetActive(false);
+				}
+
+				if(badU.activeSelf)
+				{
+					juicyInteract.StartCoroutine(juicyInteract.UIPop(badU.transform.localScale, closed, badU));
+					badU.SetActive(false);
+				}
+			  
+
         	  listenToDig();
 			  
         	  break;
@@ -131,6 +178,7 @@ public class GameShoveling : MonoBehaviour
         	  digTime++;
         	  if (digTime >= MOVETIME) 
         	  {
+				
         	  	charPosition = START;
         	  	digTime = 0;
         	  }
@@ -245,9 +293,23 @@ public class GameShoveling : MonoBehaviour
 				charPosition = ADD;
 
     		//	Good uranium raises temperature, bad lowers it
-    		furnaceTemp = goodUranium
-    			? furnaceTemp + GOOD_U
-    			: furnaceTemp - BAD_U;
+    		//furnaceTemp = goodUranium
+    			//? furnaceTemp + GOOD_U
+    			//: furnaceTemp - BAD_U;
+				if(goodUranium)
+				{
+					furnaceTemp += GOOD_U;
+					goodU.SetActive(true);
+					juicyInteract.StartCoroutine(juicyInteract.UIPop(goodU.transform.localScale,goodUSize,goodU));
+				}
+				else{
+					furnaceTemp -= BAD_U;
+					juicyInteract.StartCoroutine(juicyInteract.CameraShake());
+					badU.SetActive(true);
+					juicyInteract.StartCoroutine(juicyInteract.UIPop(badU.transform.localScale,badUSize,badU));
+
+				}
+				
 				player.animator.SetBool("Shoveling", false);
 				player.animator.SetTrigger("Throw");
 				shovelGameActive = false;

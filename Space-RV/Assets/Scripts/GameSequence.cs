@@ -60,6 +60,13 @@ public class GameSequence	 : MonoBehaviour
 	public Slider happyBar;
 
 	public GameObject interactPrompt;
+	public GameObject stopButton;
+	public GameObject warning;
+
+	Vector3 stopSize;
+	Vector3 closed;
+	Vector3 warningSize;
+	public JuicyInteract playerFeedback;
 
     void Start()
     {
@@ -75,6 +82,14 @@ public class GameSequence	 : MonoBehaviour
 		directions.Add(left);
     	Debug.Log("sequence game running");
 		interactPrompt.SetActive(false);
+		closed = new Vector3(0,0,0);
+		stopSize = stopButton.transform.localScale;
+		warningSize = warning.transform.localScale;
+		warning.transform.localScale = closed;
+		warning.SetActive(false);
+		stopButton.transform.localScale = closed;
+		stopButton.SetActive(false);
+		
     }
 
     void FixedUpdate()	{
@@ -91,6 +106,26 @@ public class GameSequence	 : MonoBehaviour
     void Update()
     {
 		happyBar.value = HAPPINESS;
+		if(HAPPINESS <= 20)
+		{
+			if(warning.activeSelf == false)
+			{
+				warning.SetActive(true);
+			playerFeedback.StartCoroutine(playerFeedback.UIPop(warning.transform.localScale,warningSize,warning));
+			}
+			
+		}
+
+		if(HAPPINESS > 20)
+		{
+			if(warning.activeSelf)
+			{
+				
+				playerFeedback.StartCoroutine(playerFeedback.UIPop(warning.transform.localScale,closed,warning));
+				warning.SetActive(false);
+			}
+		}
+
 
 		//if inside the kid's room
 		if(canInteract)
@@ -103,6 +138,8 @@ public class GameSequence	 : MonoBehaviour
 					player.canMove = false;
 					interactPrompt.SetActive(false);
 					readyForNextSeq = true;
+					stopButton.SetActive(true);
+					playerFeedback.StartCoroutine(playerFeedback.UIPop(stopButton.transform.localScale,stopSize,stopButton));
 
 				}
 			}
@@ -133,6 +170,10 @@ public class GameSequence	 : MonoBehaviour
 				//	Debug.Log("for is running");
 		    	}
 				space4.enabled = false;
+
+				
+				playerFeedback.StartCoroutine(playerFeedback.UIPop(stopButton.transform.localScale,closed,stopButton));
+				stopButton.SetActive(false);
 				interactPrompt.SetActive(true);
 				//Debug.Log("Last sprite should turn off");
 	    	}
@@ -271,11 +312,17 @@ public class GameSequence	 : MonoBehaviour
 			if (inputValue == sequence[currentArrow]) 
 			{
 				Debug.Log("correct");
+				spaces[currentArrow].color = Color.green;
+
 				currentArrow++;
 			}	else {
 	//	CALL START-OVER STATE HERE
 				Debug.Log("wrong");
 				currentArrow = 0;
+				foreach(Image sprite in spaces)
+				{
+					playerFeedback.StartCoroutine(playerFeedback.SpriteFlash(sprite));
+				}
 			}
 
 			//	If the arrow sequence is complete, reveal the button
@@ -319,6 +366,7 @@ public class GameSequence	 : MonoBehaviour
 			currentImage.enabled = false;
 
 			currentImage.transform.rotation = Quaternion.Euler(0,0,0);
+			currentImage.color = Color.white;
 			//currentImage.sprite = directions[sequence[i]]; 
     	}
     	char letter = ' ';
@@ -369,6 +417,7 @@ Debug.Log("now press " + letter);
     	{
     		showArrow(sequence[i]);
 			Image currentImage = spaces[i];
+			currentImage.color = Color.white;
 
 			currentImage.transform.Rotate(0,0,(-90* sequence[i]));
 			currentImage.enabled = true;

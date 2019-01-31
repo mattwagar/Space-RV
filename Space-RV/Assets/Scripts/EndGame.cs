@@ -13,7 +13,8 @@ public class EndGame : MonoBehaviour
 
 	//	Win and lose states
 		public bool WIN_GAME = false;
-		public bool LOSE_GAME = false;
+		//public bool LOSE_GAME = false;
+		bool sceneChange = false;
 	//	=================================
 
 	public GameSequence kids;
@@ -28,8 +29,9 @@ public class EndGame : MonoBehaviour
     {
         if (timeBeforeFinish <= 0) 
         {
-        	WIN_GAME = true;
-			SceneManager.LoadScene("WIN");
+        	//WIN_GAME = true;
+			StartCoroutine(LoadScene(true));
+			//SceneManager.LoadScene("WIN");
         }
 
         if (kids.HAPPINESS <= 0
@@ -37,8 +39,28 @@ public class EndGame : MonoBehaviour
         	|| furnace.furnaceTemp <= 0
         	) 
         {
-        	LOSE_GAME = true;
-			SceneManager.LoadScene("LOSE", LoadSceneMode.Single);
+        	StartCoroutine(LoadScene(true));
+			//SceneManager.LoadScene("LOSE", LoadSceneMode.Single);
         }
     }
+
+	IEnumerator LoadScene(bool state)
+	{
+		if(sceneChange)
+		{
+			yield break;
+		}
+
+		sceneChange = true;
+		if(state)
+		{
+			SceneManager.LoadScene("WIN");
+        }
+
+		else
+		{
+			SceneManager.LoadScene("LOSE");
+		}
+		
+	}
 }

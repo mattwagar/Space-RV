@@ -45,6 +45,8 @@ public class GameSteering : MonoBehaviour
 	public GameObject pilotUI;
 	public GameObject goodText;
 	public GameObject steerUI;
+	public Image right;
+	public Image left;
 
 	public JuicyInteract uiPop;
 
@@ -210,14 +212,40 @@ public class GameSteering : MonoBehaviour
     		{
     			Debug.Log("moving left");
     			direction = -1;
+				left.color = Color.green;
+			//	right.color = Color.white;
     		}
     		if (input > 0) 
     		{
     			Debug.Log("moving right");
     			direction = 1;
+				right.color = Color.green;
+			//	left.color = Color.white;
     		}
+
+			else{
+				left.color = Color.white;
+				right.color = Color.white;
+			}
     		currentSpeed += Math.Abs(input) * ACCEL;
     	}
+
+		if(input > 0)
+		{
+			right.color = Color.green;
+			left.color = Color.white;
+		}
+
+		if(input <0)
+		{
+			left.color = Color.green;
+			right.color = Color.white;
+		}
+		if(input == 0)
+		{
+			left.color = Color.white;
+			right.color = Color.white;
+		}
 
 		//press b to exit steering
 			if(Input.GetButtonDown("Fire2"))
